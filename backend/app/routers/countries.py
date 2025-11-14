@@ -109,7 +109,7 @@ def _generate_insights(record: CountryData) -> List[str]:
 
     insights = [
         f"Dân số hiện tại ~{population:,.0f} người.",
-        f"Tỷ lệ sinh {birth_rate:.2f}‰ • Tỷ lệ tử {death_rate:.2f}‰ • Tăng trưởng {growth_rate:.2f}‰.",
+        f"Tỷ lệ sinh {birth_rate:.2f}% • Tỷ lệ tử {death_rate:.2f}‰ • Tăng trưởng {growth_rate:.2f}%.",
         f"GDP bình quân đầu người ~{gdp:,.0f} USD.",
     ]
 
@@ -131,7 +131,7 @@ def _generate_research(record: CountryData) -> List[Dict[str, str]]:
 
     research.append({
         "title": "Theo dõi cân bằng sinh – tử",
-        "description": f"Tỷ lệ sinh {birth_rate:.1f}‰ so với tỷ lệ tử {death_rate:.1f}‰. Cần chính sách phù hợp để ổn định quy mô dân số."
+        "description": f"Tỷ lệ sinh {birth_rate:.1f}% so với tỷ lệ tử {death_rate:.1f}%. Cần chính sách phù hợp để ổn định quy mô dân số."
     })
 
     if gdp:
@@ -166,9 +166,9 @@ def _safe_growth(record: CountryData) -> float:
 def build_profile(country_info: Dict[str, str], record: CountryData) -> Dict:
     stats = [
         _map_stat(_format_number(record.population) / 1_000_000, "Dân số (triệu)", "population", accent="blue"),
-        _map_stat(_format_number(record.birth_rate), "Tỷ lệ sinh (‰)", "birthRate", fmt="number"),
-        _map_stat(_format_number(record.death_rate), "Tỷ lệ tử (‰)", "deathRate", fmt="number"),
-        _map_stat(_safe_growth(record), "Tăng trưởng (‰)", "growth", fmt="number", accent="green"),
+        _map_stat(_format_number(record.birth_rate), "Tỷ lệ sinh (%)", "birthRate", fmt="number"),
+        _map_stat(_format_number(record.death_rate), "Tỷ lệ tử (%)", "deathRate", fmt="number"),
+        _map_stat(_safe_growth(record), "Tăng trưởng (%)", "growth", fmt="number", accent="green"),
         _map_stat(_format_number(record.gdp_per_capita), "GDP/người (USD)", "gdp", fmt="currency", accent="purple"),
     ]
 
