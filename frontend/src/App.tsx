@@ -229,6 +229,11 @@ const App = () => {
     setChatError(null);
 
     try {
+      if (!formValues) {
+        setChatError("Form values not initialized");
+        return;
+      }
+
       const context = {
         country: selectedProfile.name,
         use_rag: useRag,
@@ -272,7 +277,9 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    runPrediction(formValues, years);
+    if (formValues) {
+      runPrediction(formValues, years);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
