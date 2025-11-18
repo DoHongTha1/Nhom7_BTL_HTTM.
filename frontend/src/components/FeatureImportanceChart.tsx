@@ -61,4 +61,3 @@ const FeatureImportanceChart = memo(({ data }: Props) => {
 });
 
 export default FeatureImportanceChart;
-
