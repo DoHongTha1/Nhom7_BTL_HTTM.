@@ -33,12 +33,32 @@ app.include_router(countries.router, prefix="/api", tags=["Countries"])
 
 @app.on_event("startup")
 async def startup_event():
-    """Initialize database on startup"""
+    """Initialize database, fetch data, and train model on startup"""
     try:
         init_db()
+        print("Fetching data from UN/World Bank API...")
+        
+        # Use World Bank API (UN official data source)
+        try:
+            import sys
+            import os
+            sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'scripts'))
+            from fetch_un_api_data import fetch_un_data
+            fetch_un_data()
+            print("UN/World Bank API data fetch completed successfully")
+            
+            # Auto-train model after fetching data
+            print("\nTraining XGBoost model with fresh data...")
+            from train_model import main as train_main
+            train_main()
+            print("Model training completed successfully\n")
+            
+        except Exception as api_error:
+            print(f"Warning: API data fetch failed: {api_error}")
+            print("Continuing with existing database data...")
+            
     except Exception as e:
-        print(f"Warning: Database initialization failed: {e}")
-        print("You may need to set up PostgreSQL first.")
+        print(f"Warning: Startup initialization failed: {e}")
 
 @app.get("/")
 async def root():

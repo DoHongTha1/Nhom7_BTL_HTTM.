@@ -201,27 +201,27 @@ Hãy trả lời một cách chuyên nghiệp, chính xác và dễ hiểu bằn
         r2 = model_metrics.get('val_r2', 0)
         
         if r2 > 0.9:
-            insights.append(f"🤖 Mô hình AI với độ chính xác R²={r2*100:.1f}% - Độ chính xác rất cao")
+            insights.append(f"Mô hình AI với độ chính xác R²={r2*100:.1f}% - Độ chính xác rất cao")
         elif r2 > 0.8:
-            insights.append(f"📊 Độ chính xác R²={r2*100:.1f}% - Độ chính xác cao")
+            insights.append(f"Độ chính xác R²={r2*100:.1f}% - Độ chính xác cao")
         else:
-            insights.append(f"📊 Độ chính xác R²={r2*100:.1f}% - Tốt")
+            insights.append(f"Độ chính xác R²={r2*100:.1f}% - Tốt")
         
-        insights.append(f"⚡ RMSE: {model_metrics.get('val_rmse', 0):.3f}% - Sai số trung bình")
+        insights.append(f"RMSE: {model_metrics.get('val_rmse', 0):.3f}% - Sai số trung bình")
         
         stage = country_data.get('stage', 3)
         if stage == 2:
-            insights.append("🚀 Giai đoạn bùng nổ - Cần đầu tư mạnh")
+            insights.append("Giai đoạn bùng nổ - Cần đầu tư mạnh")
         elif stage == 3:
-            insights.append("⚡ Cơ cấu dân số vàng - Cơ hội kinh tế lớn")
+            insights.append("Cơ cấu dân số vàng - Cơ hội kinh tế lớn")
         elif stage >= 4:
-            insights.append("⚠️ Già hóa dân số - Cần chính sách hỗ trợ")
+            insights.append("Già hóa dân số - Cần chính sách hỗ trợ")
         
         growth = forecast_data.get('growthRate', 0)
         if growth > 0:
-            insights.append(f"🔮 AI dự báo tăng {growth:.2f}% trong {forecast_data.get('years', 10)} năm")
+            insights.append(f"AI dự báo tăng {growth:.2f}% trong {forecast_data.get('years', 10)} năm")
         else:
-            insights.append(f"🔮 AI dự báo giảm {abs(growth):.2f}% trong {forecast_data.get('years', 10)} năm")
+            insights.append(f"AI dự báo giảm {abs(growth):.2f}% trong {forecast_data.get('years', 10)} năm")
         
         return insights
     

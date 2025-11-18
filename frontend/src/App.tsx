@@ -276,13 +276,6 @@ const App = () => {
       .catch(() => setModelStatus(null));
   }, []);
 
-  useEffect(() => {
-    if (formValues) {
-      runPrediction(formValues, years);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const forecastSummary = useMemo(() => {
     if (!forecast.length) {
       return null;
@@ -325,27 +318,11 @@ const App = () => {
   }, [countryOrder, profiles]);
 
   const dynamicStats = useMemo(() => {
-    if (!selectedProfile) {
-      return [];
-    }
-    // Use original profile data (World Bank), not adjusted form values
-    const sourceData = selectedProfile.formPreset;
-    return selectedProfile.stats.map((stat) => {
-      switch (stat.key) {
-        case "population":
-          return { ...stat, value: sourceData.population / 1_000_000 };
-        case "birthRate":
-          return { ...stat, value: sourceData.birthRate };
-        case "deathRate":
-          return { ...stat, value: sourceData.deathRate };
-        case "growth":
-          return { ...stat, value: sourceData.birthRate - sourceData.deathRate };
-        case "gdp":
-          return { ...stat, value: sourceData.gdpPerCapita };
-        default:
-          return stat;
-      }
-    });
+    return selectedProfile?.stats ?? [];
+  }, [selectedProfile]);
+
+  const dynamicInsights = useMemo(() => {
+    return selectedProfile?.insights ?? [];
   }, [selectedProfile]);
 
   const statusReady = modelStatus?.is_trained ?? false;
@@ -454,7 +431,7 @@ const App = () => {
           <div className="sidebar-card">
             <h3>Phân Tích AI</h3>
             <ul className="insight-list">
-              {selectedProfile.insights.map((item, index) => (
+              {dynamicInsights.map((item, index) => (
                 <li key={index}>{item}</li>
               ))}
             </ul>

@@ -26,17 +26,21 @@ class Settings:
     EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
     
     # Data sources
-    WORLD_BANK_API_URL = "https://api.worldbank.org/v2/country"
     UN_DATA_API_URL = "https://population.un.org/wpp/Download/Standard/CSV/"
     
-    # Training settings
+    # Training settings - Simplified for small dataset
     XGBOOST_PARAMS = {
-        "n_estimators": 100,
-        "max_depth": 6,
-        "learning_rate": 0.1,
-        "subsample": 0.8,
-        "colsample_bytree": 0.8,
-        "random_state": 42
+        "n_estimators": 50,          # Reduced to prevent overfitting
+        "max_depth": 3,              # Very shallow trees
+        "learning_rate": 0.1,        # Standard learning rate
+        "subsample": 1.0,            # Use all data
+        "colsample_bytree": 1.0,     # Use all features
+        "min_child_weight": 5,       # Prevent overfitting on small groups
+        "gamma": 0.5,                # Strong regularization
+        "reg_alpha": 1.0,            # Strong L1 regularization
+        "reg_lambda": 2.0,           # Strong L2 regularization
+        "random_state": 42,
+        "objective": "reg:squarederror"
     }
     
     # Data pipeline

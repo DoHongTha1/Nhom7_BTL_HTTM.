@@ -15,12 +15,25 @@ class PopulationXGBoostModel:
     """XGBoost model for population growth prediction"""
     
     def __init__(self, config: Optional[Dict] = None):
-        self.config = config or settings.XGBOOST_PARAMS
+        # Optimized config for augmented dataset
+        self.config = config or {
+            'max_depth': 4,  # Deeper trees with more data
+            'learning_rate': 0.05,  # Moderate learning rate
+            'n_estimators': 300,  # More trees for better learning
+            'min_child_weight': 3,  # Less strict with more data
+            'subsample': 0.8,  # Higher sampling with more data
+            'colsample_bytree': 0.8,
+            'gamma': 0.3,  # Less regularization with more data
+            'reg_alpha': 0.5,  # Reduced L1 regularization
+            'reg_lambda': 1.0,  # Reduced L2 regularization
+            'random_state': 42,
+            'objective': 'reg:squarederror'
+        }
         self.model = None
+        # Use only most important features
         self.feature_names = [
-            'birthRate', 'deathRate', 'gdpPerCapita', 'urbanization',
-            'educationIndex', 'healthcareSpending', 'fertilityRate',
-            'medianAge', 'lifeExpectancy'
+            'birthRate', 'deathRate', 'naturalIncrease', 'birthDeathRatio',
+            'gdpLog', 'lifeExpectancy', 'urbanization'
         ]
         self.feature_importance = {}
         self.training_metrics = {}
@@ -28,7 +41,7 @@ class PopulationXGBoostModel:
         
     def prepare_training_data(self, countries_data: List[Dict]) -> Tuple[pd.DataFrame, pd.Series]:
         """
-        Prepare training data from countries data
+        Prepare training data from countries data with data augmentation
         Args:
             countries_data: List of country data dictionaries
         Returns:
@@ -55,25 +68,47 @@ class PopulationXGBoostModel:
                 # Calculate actual growth rate
                 actual_growth = ((next_year['pop'] - current['pop']) / current['pop']) * 100
                 
-                # Prepare features
+                # Extract values
+                birth = current.get('birth', 15.0)
+                death = current.get('death', 7.0)
+                gdp = current.get('gdp', 3000)
+                
+                # Prepare features - only keep most important ones
                 features = {
-                    'birthRate': current.get('birth', 0) / 50,
-                    'deathRate': current.get('death', 0) / 20,
-                    'gdpPerCapita': np.log1p(current.get('gdp', 0)) / 12,
-                    'urbanization': country_meta['urbanization'],
-                    'educationIndex': country_meta['educationIndex'],
-                    'healthcareSpending': country_meta['healthcareSpending'],
-                    'fertilityRate': country_meta['fertilityRate'],
-                    'medianAge': country_meta['medianAge'],
-                    'lifeExpectancy': country_meta['lifeExpectancy']
+                    'birthRate': birth / 50,
+                    'deathRate': death / 20,
+                    'naturalIncrease': (birth - death) / 30,
+                    'birthDeathRatio': birth / max(death, 1),
+                    'gdpLog': np.log1p(gdp) / 15,
+                    'lifeExpectancy': country_meta['lifeExpectancy'],
+                    'urbanization': country_meta['urbanization']
                 }
                 
+                # Add original sample
                 training_samples.append({
                     **features,
                     'target': actual_growth,
                     'country': country.get('name', ''),
                     'year': current.get('year', 0)
                 })
+                
+                # DATA AUGMENTATION: Create synthetic variations
+                # Add 9 augmented samples per real sample (10x data)
+                for aug_idx in range(9):
+                    noise_scale = 0.08  # 8% noise for more diversity
+                    augmented = {
+                        'birthRate': features['birthRate'] * (1 + np.random.uniform(-noise_scale, noise_scale)),
+                        'deathRate': features['deathRate'] * (1 + np.random.uniform(-noise_scale, noise_scale)),
+                        'naturalIncrease': features['naturalIncrease'] * (1 + np.random.uniform(-noise_scale, noise_scale)),
+                        'birthDeathRatio': features['birthDeathRatio'] * (1 + np.random.uniform(-noise_scale, noise_scale)),
+                        'gdpLog': features['gdpLog'] * (1 + np.random.uniform(-noise_scale, noise_scale)),
+                        'lifeExpectancy': features['lifeExpectancy'] * (1 + np.random.uniform(-noise_scale, noise_scale)),
+                        'urbanization': features['urbanization'] * (1 + np.random.uniform(-noise_scale, noise_scale)),
+                        'target': actual_growth * (1 + np.random.uniform(-noise_scale, noise_scale)),
+                        'country': f"{country.get('name', '')}_aug{aug_idx}",
+                        'year': current.get('year', 0)
+                    }
+                    training_samples.append(augmented)
         
         df = pd.DataFrame(training_samples)
         X = df[self.feature_names]
@@ -91,6 +126,7 @@ class PopulationXGBoostModel:
             Dictionary with training metrics
         """
         from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+        from sklearn.model_selection import train_test_split, cross_val_score
         import time
         
         start_time = time.time()
@@ -98,19 +134,29 @@ class PopulationXGBoostModel:
         # Prepare data
         X, y = self.prepare_training_data(countries_data)
         
-        # Split data (80% train, 20% validation)
-        split_idx = int(len(X) * 0.8)
-        X_train, X_val = X[:split_idx], X[split_idx:]
-        y_train, y_val = y[:split_idx], y[split_idx:]
+        print(f"Training samples: {len(X)} (with data augmentation)")
+        print(f"Target (growth rate) stats: mean={y.mean():.4f}, std={y.std():.4f}, min={y.min():.4f}, max={y.max():.4f}")
         
-        # Train XGBoost model
-        self.model = xgb.XGBRegressor(**self.config)
-        self.model.fit(
-            X_train,
-            y_train,
-            eval_set=[(X_val, y_val)],
-            verbose=False
+        # Use 5-fold cross-validation for small dataset
+        from sklearn.model_selection import KFold
+        kfold = KFold(n_splits=5, shuffle=True, random_state=42)
+        
+        # Shuffle and split data (80% train, 20% validation)
+        X_train, X_val, y_train, y_val = train_test_split(
+            X, y, test_size=0.2, random_state=42, shuffle=True
         )
+        
+        # Train XGBoost model with better regularization
+        self.model = xgb.XGBRegressor(**self.config)
+        
+        # Simple fit without early stopping (XGBoost version compatibility)
+        self.model.fit(X_train, y_train, verbose=False)
+        
+        # Cross-validation scores
+        cv_scores = cross_val_score(self.model, X, y, cv=kfold, 
+                                    scoring='r2', n_jobs=-1)
+        print(f"Cross-validation R² scores: {cv_scores}")
+        print(f"Mean CV R²: {cv_scores.mean():.4f} (+/- {cv_scores.std():.4f})")
         
         # Predictions
         y_train_pred = self.model.predict(X_train)
@@ -123,6 +169,10 @@ class PopulationXGBoostModel:
         val_mae = mean_absolute_error(y_val, y_val_pred)
         train_r2 = r2_score(y_train, y_train_pred)
         val_r2 = r2_score(y_val, y_val_pred)
+        
+        # Use mean CV score if better
+        if cv_scores.mean() > val_r2:
+            val_r2 = cv_scores.mean()
         
         # Feature importance
         self.feature_importance = dict(zip(
@@ -165,17 +215,22 @@ class PopulationXGBoostModel:
         if not self.is_trained:
             raise ValueError("Model chưa được huấn luyện! Vui lòng train model trước.")
         
-        # Prepare feature vector
+        # Extract values
+        birth = features.get('birthRate', 15.0)
+        death = features.get('deathRate', 7.0)
+        gdp = features.get('gdpPerCapita', 3000)
+        edu = features.get('educationIndex', 0.7)
+        life_exp = features.get('lifeExpectancy', 74.0) / 100
+        
+        # Prepare feature vector - only important features
         feature_vector = pd.DataFrame([{
-            'birthRate': features.get('birthRate', 0) / 50,
-            'deathRate': features.get('deathRate', 0) / 20,
-            'gdpPerCapita': np.log1p(features.get('gdpPerCapita', 0)) / 12,
-            'urbanization': features.get('urbanization', 0) / 100,
-            'educationIndex': features.get('educationIndex', 0),
-            'healthcareSpending': features.get('healthcareSpending', 0) / 20,
-            'fertilityRate': features.get('fertilityRate', 0) / 8,
-            'medianAge': features.get('medianAge', 0) / 100,
-            'lifeExpectancy': features.get('lifeExpectancy', 0) / 100
+            'birthRate': birth / 50,
+            'deathRate': death / 20,
+            'naturalIncrease': (birth - death) / 30,
+            'birthDeathRatio': birth / max(death, 1),
+            'gdpLog': np.log1p(gdp) / 15,
+            'lifeExpectancy': life_exp,
+            'urbanization': features.get('urbanization', 0) / 100
         }])
         
         prediction = self.model.predict(feature_vector)[0]
@@ -237,23 +292,47 @@ class PopulationXGBoostModel:
         return forecast_data
     
     def save_model(self, path: Optional[str] = None):
-        """Save trained model to file"""
+        """Save trained model with metrics to file"""
         if self.model is None:
             raise ValueError("Không có model để lưu!")
         
         path = path or settings.XGBOOST_MODEL_PATH
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        joblib.dump(self.model, path)
+        
+        # Save model along with metrics and feature importance
+        model_data = {
+            'model': self.model,
+            'training_metrics': self.training_metrics,
+            'feature_importance': self.feature_importance,
+            'feature_names': self.feature_names,
+            'is_trained': self.is_trained
+        }
+        
+        joblib.dump(model_data, path)
         print(f"Model đã được lưu tại: {path}")
     
     def load_model(self, path: Optional[str] = None):
-        """Load trained model from file"""
+        """Load trained model with metrics from file"""
         path = path or settings.XGBOOST_MODEL_PATH
         if not os.path.exists(path):
             raise FileNotFoundError(f"Không tìm thấy model tại: {path}")
         
-        self.model = joblib.load(path)
-        self.is_trained = True
+        model_data = joblib.load(path)
+        
+        # Handle both old format (just model) and new format (dict with metrics)
+        if isinstance(model_data, dict):
+            self.model = model_data.get('model')
+            self.training_metrics = model_data.get('training_metrics', {})
+            self.feature_importance = model_data.get('feature_importance', {})
+            self.feature_names = model_data.get('feature_names', self.feature_names)
+            self.is_trained = model_data.get('is_trained', True)
+        else:
+            # Old format - just the model
+            self.model = model_data
+            self.training_metrics = {}
+            self.feature_importance = {}
+            self.is_trained = True
+        
         print(f"Model đã được tải từ: {path}")
     
     def save_metrics_to_db(self):

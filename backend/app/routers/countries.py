@@ -109,7 +109,7 @@ def _generate_insights(record: CountryData) -> List[str]:
 
     insights = [
         f"Dân số hiện tại ~{population:,.0f} người.",
-        f"Tỷ lệ sinh {birth_rate:.2f}% • Tỷ lệ tử {death_rate:.2f}‰ • Tăng trưởng {growth_rate:.2f}%.",
+        f"Tỷ lệ sinh {birth_rate:.2f}% - Tỷ lệ tử {death_rate:.2f}‰ - Tăng trưởng {growth_rate:.2f}%.",
         f"GDP bình quân đầu người ~{gdp:,.0f} USD.",
     ]
 

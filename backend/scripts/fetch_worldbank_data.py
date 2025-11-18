@@ -78,7 +78,7 @@ def fetch_country_data(country_code, country_name, year):
 
 def fetch_worldbank_data():
     """Fetch data from World Bank API for all ASEAN countries"""
-    print("🌍 Fetching World Bank data for ASEAN countries...")
+    print("Fetching World Bank data for ASEAN countries...")
     print(f"Countries: {', '.join(ASEAN_COUNTRIES.values())}\n")
     
     db = SessionLocal()
@@ -86,7 +86,7 @@ def fetch_worldbank_data():
     
     try:
         for country_code, country_name in ASEAN_COUNTRIES.items():
-            print(f"\n📊 {country_name} ({country_code}):")
+            print(f"\n{country_name} ({country_code}):")
             
             # Fetch data for recent years (2015-2025)
             for year in range(2025, 2014, -1):  # Most recent first
@@ -96,7 +96,7 @@ def fetch_worldbank_data():
                 country_data = fetch_country_data(country_code, country_name, year)
                 
                 if not country_data or len(country_data) < 5:
-                    print(f"  ⏭️  {year}: No complete data")
+                    print(f"  {year}: No complete data")
                     continue
                 
                 # Check if record already exists
@@ -111,7 +111,7 @@ def fetch_worldbank_data():
                         if key not in ["country_code", "country_name", "year"] and value is not None:
                             setattr(existing, key, value)
                     db.commit()
-                    print(f"  ✏️  {year}: Updated")
+                    print(f"  {year}: Updated")
                 else:
                     # Create new record
                     record = CountryData(
@@ -129,16 +129,16 @@ def fetch_worldbank_data():
                     db.add(record)
                     db.commit()
                     fetched_count += 1
-                    print(f"  ✅ {year}: Added")
+                    print(f"  {year}: Added")
         
         print(f"\n\n{'='*50}")
-        print(f"✅ World Bank data fetch completed!")
-        print(f"📝 Records added/updated: {fetched_count}")
+        print(f"World Bank data fetch completed!")
+        print(f"Records added/updated: {fetched_count}")
         print(f"{'='*50}")
         
     except Exception as e:
         db.rollback()
-        print(f"\n❌ Error: {e}")
+        print(f"\nError: {e}")
         raise
     finally:
         db.close()
