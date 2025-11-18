@@ -56,4 +56,3 @@ const OverviewDonutChart = memo(({ data }: Props) => {
 });
 
 export default OverviewDonutChart;
-
