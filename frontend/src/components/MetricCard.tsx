@@ -3,13 +3,11 @@ type Props = {
   value: string;
   accent?: "default" | "success" | "warning";
 };
-
 const accentClassMap: Record<NonNullable<Props["accent"]>, string> = {
   default: "metric-value",
   success: "metric-value",
   warning: "metric-value"
 };
-
 const MetricCard = ({ title, value, accent = "default" }: Props) => {
   return (
     <div className="metric-card">
@@ -18,6 +16,5 @@ const MetricCard = ({ title, value, accent = "default" }: Props) => {
     </div>
   );
 };
-
 export default MetricCard;
 
