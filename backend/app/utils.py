@@ -14,7 +14,6 @@ def convert_countries_data_to_training_format(countries_data: Dict) -> List[Dict
     training_data = []
     
     for country_key, country_data in countries_data.items():
-        # Extract historical data
         historical_data = []
         for hist in country_data.get('historicalData', []):
             historical_data.append({
@@ -25,7 +24,6 @@ def convert_countries_data_to_training_format(countries_data: Dict) -> List[Dict
                 'gdp': hist.get('gdp', 0)
             })
         
-        # Convert to training format
         training_data.append({
             'name': country_data.get('name', ''),
             'country_code': country_key.upper()[:2] if len(country_key) >= 2 else country_key,
